@@ -1,0 +1,143 @@
+https://devnote.in/how-to-send-email-in-laravel-with-example/
+
+Important
+
+https://cleancommit.io/blog/sending-emails-in-laravel-mailable-classes-templates-laravel-versions/ 
+
+https://www.youtube.com/watch?v=L5LAqIABGZE
+
+Init Sending Mail
+
+Step 1: Create MailNotify Class
+
+	php artisan make:mail MailNotify
+
+Step 2: Open MailNotify file
+
+	public $data = [];
+
+
+	public function __construct($data){
+        	$this->data = $data;
+	}
+
+	//set senderEmail, senderName and mailSubject
+	public function envelope(){
+	        return new Envelope(
+        	    // subject: 'Mail Notify',
+	            //Examy System : senderName
+	            // tvclockdev2@gmail.com : senderEmail
+            	    //from: new Address('tvclockdev2@gmail.com', 'Examy System'),
+            	    from: new Address(env('MAIL_USERNAME'), 'Examy System'),
+                    subject: $this->data['subject'],//mail subject
+	        );
+    	}
+
+	//set mailBody
+	public function content(){
+        	return new Content(
+	            view: 'emails.index',
+	        );
+        	// return $this->from('tvclockdev2@gmail.com', 'Examy')
+	        //     ->subject($this->data['subject'])
+        	//     ->view('emails.index')->with('data', $this->data);
+	}
+
+Step 3: Create View File (for forming mail body content and message styles)
+
+	at resources >> views >> r.c >> new folder >> emails
+
+	at emails >> r.c >> new file >> index.blade.php
+
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+		    <meta charset="UTF-8">
+		    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+		    <title>Sending Mail</title>
+		</head>
+		<body>
+		    <p>{{ $data['body'] }}</p>
+		</body>
+	</html>
+
+Step 4: Create Controller for sending mail functions
+
+	php artisan make:controller MailController
+
+	//sending mail function
+	public function sendMail(){
+        	$data = [
+	            'subject' => 'Test Mail',
+        	    'body' => 'This is a test message!!',
+	        ];
+        	try {
+	            Mail::to('image1693@gmail.com')->send(new MailNotify($data));
+        	    return response()->json(['Great check your mail box']);
+	        } catch (\Exception $e) {
+        	    return response()->json(['Sorry somthing went wrong!!']);
+	        }
+    	}
+
+	Route::get('mails/send', [MailController::class, 'sendMail']);
+
+Step 5: Setup mail configurations
+
+	**because (you can no longer activate the option to allow access to less secure applications in Gmail)
+
+	go to gmail account >> click on gmail pic >> manage your google account >> go to security tab 
+
+	activate 2FA (2-Step Verification) on phone number >> scroll down to end and click on app passwords
+
+	حدد تطبيقا .. اسم مخصص .. اي اسم مثلا
+
+	examy
+
+	انشاء
+
+	will generate an password for ur sending mail service like this >> ebawykijupfqqvlu
+
+	go to .env file to configure mail (and set password (ebawykijupfqqvlu) not your gmail password)
+
+	MAIL_MAILER=smtp
+	MAIL_HOST=mailpit
+	MAIL_PORT=465
+	MAIL_USERNAME=tvclockdev2@gmail.com
+	MAIL_PASSWORD='android@@12345'
+	MAIL_ENCRYPTION=ssl
+	MAIL_FROM_ADDRESS=tvclockdev2@gmail.com
+	MAIL_FROM_NAME="${APP_NAME}"
+
+	change to
+
+	MAIL_MAILER=smtp
+	MAIL_HOST=smtp.gmail.com
+	MAIL_PORT=587
+	MAIL_USERNAME=tvclockdev2@gmail.com
+	MAIL_PASSWORD='ebawykijupfqqvlu'
+	MAIL_ENCRYPTION=tls
+	MAIL_FROM_ADDRESS=tvclockdev2@gmail.com
+	MAIL_FROM_NAME="${APP_NAME}"
+
+	go to config/mail.php
+
+	'smtp' => [
+            'transport' => 'smtp',
+            //'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+            // 'host' => env('MAIL_HOST', 'smtp.googlemail.com'),
+            'host' => env('MAIL_HOST', 'smtp.gmail.com'),
+            'port' => env('MAIL_PORT', 587),
+            // 'port' => env('MAIL_PORT', 465),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            // 'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
+            'username' => env('MAIL_USERNAME'),
+            'password' => env('MAIL_PASSWORD'),
+            'timeout' => null,
+        ],
+
+	
+
+Step 6: Run Server
+
+	php artisan serve

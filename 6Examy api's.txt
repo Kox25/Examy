@@ -1,0 +1,45 @@
+Login for either (admin, administrator and doctor)
+
+----------------------------------------------------------------------
+
+#Employee Api's
+
+Get All Employees - Create Employee - Delete Employee
+
+Get Employees By Type - Get Employee Subjects - Add Employee Subject
+
+----------------------------------------------------------------------
+
+#Subject Api's
+
+Get All Subjects (for adding employee subjects) - Create Subject - Delete Subject
+
+Get Subject Questions
+
+----------------------------------------------------------------------
+
+#Question Api's
+
+Get All Questions - Create Question - Delete Question
+
+Get Question Answers - Generate Random Questions (Generate Question Paper)
+
+----------------------------------------------------------------------
+
+#Answer Api's
+
+Get All Answers - Create Answer - Delete Answer
+
+----------------------------------------------------------------------
+
+#Exam Api's
+
+Get All Exams - Create Exam 
+
+Get Exam Questions
+
+---------------------------------------------------------------------
+
+#Mail Api's
+
+Send Mail

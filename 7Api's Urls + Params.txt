@@ -1,0 +1,185 @@
+#Auth
+
+	//login for either admin - administrator - doctor
+
+		(Post) http://localhost:8000/api/login
+
+		{email: 'ahmad@gmail.com',password: '1234'}
+
+--------------------------------------------------------------------------------
+
+#Employee
+
+	//Get All Employees
+
+		(Get) http://localhost:8000/api/employees
+
+	//Create Employee
+
+		(Post) http://localhost:8000/api/employees
+
+		employee: Employee
+
+		{name: 'ahmad', phone: '0957950098', email: 'ahmad@gmail.com', password: '1234' , type: 2}
+
+		type [0, 1, 2] >> 0: for create admin, 1: for create administrator, 2: for create doctors
+
+	//Delete Employee By Id
+
+		(Delete) http://localhost:8000/api/employees/{id} (1: employee_id)
+
+		http://localhost:8000/api/employees/1 (1: employee_id)
+
+	//Get Employees By Type
+
+		(Get) http://localhost:8000/api/employees/type/{type} 
+
+		http://localhost:8000/api/employees/type/2 (0: for getting admins, 1: for getting administrators, 2: for getting doctors)
+
+	//Get Employee Subjects
+
+		(Get) http://localhost:8000/api/employee-subjects/{empId}
+
+		http://localhost:8000/api/employee-subjects/1 (1: employee_id)
+
+	//Add Employee Subject
+
+		(Post) http://localhost:8000/api/employee-subjects
+
+		{empId: 1, subId: 2}
+
+--------------------------------------------------------------------------------
+
+#Subject
+
+	//Get All Subjects (for adding employee subjects)
+
+		(Get) http://localhost:8000/api/subjects
+
+	//Create Subject
+
+		(Post) http://localhost:8000/api/subjects
+
+		subject: Subject
+
+		{name: 'math'}
+
+	//Delete Subject By Id
+
+		(Delete) http://localhost:8000/api/subjects/{id}
+
+		http://localhost:8000/api/subjects/2 (2: subject_id)
+
+	//Get Subject Questions
+
+		(Get) http://localhost:8000/api/subject-questions/{subjectId}
+
+		http://localhost:8000/api/subject-questions/1 (1: subject_id)
+
+--------------------------------------------------------------------------------
+
+#Question
+
+	//Get All Questions with their related answers list
+
+		(Get) http://localhost:8000/api/questions
+
+	//Create Question
+
+		(Post) http://localhost:8000/api/questions
+
+		{question: "2 + (3 * 9) = ?", chapter_number: 2, question_age: 0, question_mark: 1, question_complexity: 2, subject_id: 1}
+
+	//Delete Question By Id
+
+		(Delete) http://localhost:8000/api/questions/{id}
+
+		http://localhost:8000/api/questions/15 (15: question_id)
+
+	//Get Question Answers
+
+		(Get) http://localhost:8000/api/question-answers/{questionId}
+
+		http://localhost:8000/api/question-answers/1 (1: question_id)
+
+	//Generate Question Paper Randomly Depend on Complexity Level (Questions selected randomly with their answers)
+
+		(Post) http://localhost:8000/api/generate-question-paper
+
+		{subject_id: 1, question_complexity: 2}
+
+		question_age not updated
+
+		exam_total_mark ??
+
+		multi correct answers x
+
+		-generate random question for an subject and depend on complexity chosen
+
+		-write question with their answers in word doc 
+
+		-save it like this (ExamPaper_SubjectName_TimeStamp) >> timestamp to make file unique
+
+		-return questionIds that i needed for create exam and storing exam questions in database if doctor accept generated paper
+
+		-return word doc path for preview it on the view
+
+		-return word file name for convert it to pdf doc if doctor accept generated paper and to make pdf file same word doc name
+
+		-return generated questions with their answers		
+
+--------------------------------------------------------------------------------
+
+#Answer
+
+	//Get All Answers
+
+		(Get) http://localhost:8000/api/answers
+
+	//Create Answer
+
+		(Post) http://localhost:8000/api/answers
+
+		{answer: 5, is_correct: 0, question_id: 1} (0: answer not corrected, 1: answer corrected)
+
+	//Delete Answer By Id
+
+		(Delete) http://localhost:8000/api/answers/{id}
+
+		http://localhost:8000/api/answers/2 (2: answer_id)
+
+--------------------------------------------------------------------------------
+
+#Exam
+
+	//Get All Exams
+
+		(Get) http://localhost:8000/api/exams
+
+	//Create Exam
+
+		(Post) http://localhost:8000/api/exams
+
+		{questionIds: [], file_name}
+
+		questionIds (exam questions) to add this questions to exam at database (at ExamPaper table)
+
+		file_name (word file name) to generate pdf doc from word doc and with same name
+
+	//Get Exam Questions with their Answers
+
+		(Get) http://localhost:8000/api/exam-questions/{examId}
+
+		http://localhost:8000/api/exam-questions/1 (1: exam_id)
+
+--------------------------------------------------------------------------------
+
+#Mail
+
+	//Send Mail
+
+		(Get) http://localhost:8000/api/mails/send/{days}
+
+		http://localhost:8000/api/mails/send/10 (10: days left to submit exam questions)
+
+			

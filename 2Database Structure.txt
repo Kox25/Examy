@@ -1,0 +1,81 @@
+#admins table (name, phone(unique), email(unique), password) 
+
+	add administrator - delete administrator >> 1 admin mange(create/delete) many administrators (1:M)
+
+	add doctor - delete doctor >> 1 admin mange(create/delete) many doctors (1:M)
+
+-----------------------------------------------------------------------
+
+#administrators table (name, phone(unique), email(unique), password, admin_id)
+
+	The administrator give notice to the doctors of the deadline for submitting the questions  
+
+-----------------------------------------------------------------------
+
+#doctors table (name, phone(unique), email(unique), password, admin_id)
+
+	add subject - delete subject  
+
+		1 doctor mange(create/delete) many subjects (1:M)
+
+		1 subject is taught by several doctors (1:M)
+
+		doctor-subject (M:M) 
+
+	add question - delete question with their respective answers
+
+	generating exam-paper for an subject
+
+-----------------------------------------------------------------------
+
+#subjects table (name)
+
+	1 subject has many questions (1:M)
+
+-----------------------------------------------------------------------
+
+#questions table (question, chapter_number, question_age, question_mark, question_complexity[0,1,2], subject_id[fk])
+
+	0: Easy, 1: Medium, 2: Difficult
+
+	1 question has many answers (1:M)
+
+-----------------------------------------------------------------------
+
+#answers table (answer, is_correct[0,1], question_id[fk]) 0: not correct answer, 1: correct answer
+
+-----------------------------------------------------------------------
+
+#exams table (exam_id, exam_date)
+
+	1 exam contain many questions (1:M)
+
+	1 question could be in many exams (1:M)
+
+	exam-question (exam-paper) (M:M)
+
+-----------------------------------------------------------------------
+
+#exam-paper (exam_id, question_id)
+
+-----------------------------------------------------------------------
+
+بما ان لمستخدمي السيستم واصفات مشتركة تم انشاء جدول اب (جدول موظف) ليحوي الواصفات المشتركة لتجنب تكرار الواصفات عند كل ابن على حدا ولتسهيل عملية البحث عن مستخدم ما او تكرر ايميل اثناء اضافة مستخدم جديد
+
+بدلا من البحث عن وجود الايميل مسبقا ب 3 جداول يتم البحث بجدول الاب فقط 
+
+اي الذهاب مرة واحدة لقاعدة البيانات وفحص جدول واحد فقط عن وجود الايميل مسبقا لمستخدم اخر منشئ مسبقا 
+
+#Employee (name, phone(unique), email(unique), password)
+
+#Admin (employee_id)
+
+#Administrator (employee_id, admin_id)
+
+#Doctor (employee_id, admin_id)
+
+بما انه لايوجد واصفات مختلفة لدى الجداول الابناء لذلك تم الاستغناء عنهم واستبدالهم بواصفة النوع بجدول الاب موظف
+
+#Employee (name, phone(unique), email(unique), password, type[0,1,2]) 0: for admin, 1: for administrator, 2: for doctor
+
+-----------------------------------------------------------------------
